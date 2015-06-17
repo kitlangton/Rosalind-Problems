@@ -1,11 +1,35 @@
 
 class ProbabilityTree
+  def self.for(d,z,r)
+    population = []
+    d.times do
+      population << Organism.new(type:"homozygous_dominant")
+    end
+    z.times do
+      population << Organism.new(type:"heterozygous")
+    end
+    r.times do
+      population << Organism.new(type:"homozygous_recessive")
+    end
+    odds = 0
 
+    population.combination(2).each do |o1,o2|
+      odds += Punnett.for(o1,o2)
+    end
+
+    odds / population.combination(2).to_a.count
+  end
 end
 
 class Punnett
   def self.for(o1,o2)
-    o1.alleles.product(o2.alleles)
+    odds = 0
+    o1.alleles.product(o2.alleles).each do |pair|
+      if pair.any?{|x| x.inspect == "Y"}
+        odds += 1
+      end
+    end
+    odds / 4.0
   end
 end
 
@@ -16,6 +40,10 @@ class Organism
   def initialize(type:"random")
     @type = type
     @alleles = generate_alleles
+  end
+
+  def inspect
+    @type
   end
 
   private
