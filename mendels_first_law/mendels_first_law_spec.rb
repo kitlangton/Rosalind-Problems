@@ -10,6 +10,6 @@ end
 
 describe ProbabilityTree do
   it "calculates" do
-    expect(ProbabilityTree.for(17,20,28)).to eq 0.7833
+    expect(ProbabilityTree.for(2,2,2)).to eq 0.7833
   end
 end
